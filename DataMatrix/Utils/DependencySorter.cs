@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace WhichMan.DataAnalytics.Helpers
+namespace WhichMan.Analytics.Utils
 {
     /// <summary>
     /// Provides fast-algorithm and low-memory usage to sort objects based on their dependencies. 
@@ -15,7 +15,7 @@ namespace WhichMan.DataAnalytics.Helpers
     /// </remarks>
     /// <author>ThangTran</author>
     /// <history>
-    /// 2012.03.21 - ThangTran: rewritten based on <see cref="TopologicalSorter"/>.
+    /// 2012.03.21 - ThangTran: rewritten based on <see cref="TopologicalSorter"/> by Tawani Anyangwe.
     /// </history>
     public class DependencySorter<T>
     {

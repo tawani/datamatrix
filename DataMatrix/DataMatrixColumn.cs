@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WhichMan.DataAnalytics
+namespace WhichMan.Analytics
 {
     public class DataMatrixColumn
     {

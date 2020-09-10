@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WhichMan.DataAnalytics
+namespace WhichMan.Analytics
 {
 
     public class DataMatrixException : Exception

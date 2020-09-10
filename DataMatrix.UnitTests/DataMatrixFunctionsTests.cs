@@ -2,15 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DataMatrix.UnitTests.Helpers;
-using WhichMan.DataAnalytics;
-using WhichMan.DataAnalytics.Functions;
+using WhichMan.Analytics;
+using WhichMan.Analytics.Functions;
+using WhichMan.Analytics.Utils;
 using Xunit;
 
 namespace DataMatrix.UnitTests
 {
     public class DataMatrixFunctionsTests : TestBase
     {
-        private List<Student> _students;
+        private readonly List<Student> _students;
 
         public DataMatrixFunctionsTests()
         {
@@ -29,9 +30,30 @@ namespace DataMatrix.UnitTests
             });
             Assert.Equal(39, dm.RowCount);
             Assert.Equal("David Johnson", dm[0][1]);
-            
+
             var tb = dm.ToDataTable();
             Assert.Equal(2, tb.Columns.Count);
+            Assert.Equal("Score", tb.Columns[0].ColumnName);
+            Assert.Equal("Name", tb.Columns[1].ColumnName);
+        }
+
+        [Fact]
+        public void Can_compute_by_concat_function_and_reorder_DataTable()
+        {
+            var table = _students.ToDataTable();
+            var dm = DataMatrixFactory.Create(table, "Score", new DataMatrixColumn
+            {
+                Name = "Name",
+                DependsOn = new[] {"FirstName", "LastName"},
+                Compute = (values, args) => values[0] + " " + values[1]
+            });
+            Assert.Equal(39, dm.RowCount);
+            Assert.Equal("David Johnson", dm[0][1]);
+
+            var tb = dm.ToDataTable("Name", "Score");
+            Assert.Equal(2, tb.Columns.Count);
+            Assert.Equal("Name", tb.Columns[0].ColumnName);
+            Assert.Equal("Score", tb.Columns[1].ColumnName);
         }
 
         [Fact]
@@ -41,11 +63,11 @@ namespace DataMatrix.UnitTests
             var dm = DataMatrixFactory.Create(table, "FirstName,LastName,Score", new DataMatrixColumn
             {
                 Name = "PercentileRank",
-                DependsOn = new[] { "Score" },
+                DependsOn = new[] {"Score"},
                 Initialize = PercentileRank.Initialize,
                 Compute = PercentileRank.Compute
             });
-            Assert.Equal(39, dm.RowCount); 
+            Assert.Equal(39, dm.RowCount);
             Assert.Equal(6.41, dm[0][3]);
 
 
@@ -54,9 +76,9 @@ namespace DataMatrix.UnitTests
         }
 
         [Fact]
-        public void Can_compute_outlier_rank_function()
+        public void Can_compute_outlier_function()
         {
-            var items = new[] { 71, 70, 73, 70, 70, 69, 70, 72, 71, 300, 71, 69 };
+            var items = new[] {71, 70, 73, 70, 70, 69, 70, 72, 71, 300, 71, 69, 2};
             var list = items.Select((c, i) => Tuple.Create("City" + i, c));
 
             var dm = DataMatrixFactory.Create(list, new[] {"City", "Temperature"},
@@ -74,6 +96,8 @@ namespace DataMatrix.UnitTests
             Assert.Equal(300, dm[9][1]);
             Assert.Equal(Outlier.OutlierType.Major, dm[9][2]);
 
+            Assert.Equal(2, dm[12][1]);
+            Assert.Equal(Outlier.OutlierType.Major, dm[12][2]);
 
             var tb = dm.ToDataTable();
             Assert.Equal(3, tb.Columns.Count);

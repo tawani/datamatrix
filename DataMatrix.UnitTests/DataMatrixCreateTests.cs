@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using DataMatrix.UnitTests.Helpers;
-using WhichMan.DataAnalytics;
+using WhichMan.Analytics;
 using Xunit;
 
 namespace DataMatrix.UnitTests

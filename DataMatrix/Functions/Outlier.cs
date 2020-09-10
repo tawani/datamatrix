@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace WhichMan.DataAnalytics.Functions
+namespace WhichMan.Analytics.Functions
 {
     public static class Outlier
     {

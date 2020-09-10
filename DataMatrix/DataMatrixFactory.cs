@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using WhichMan.DataAnalytics.Helpers;
+using WhichMan.Analytics.Utils;
 
-namespace WhichMan.DataAnalytics
+namespace WhichMan.Analytics
 {
     public static class DataMatrixFactory
     {
@@ -39,7 +40,6 @@ namespace WhichMan.DataAnalytics
             var rowIndex = 0;
             foreach (DataRow row in table.Rows)
             {
-                dm.NewRow();
                 foreach (var colIndex in colIndexes)
                 {
                     var myCol = cols[colIndex];
@@ -84,7 +84,6 @@ namespace WhichMan.DataAnalytics
             
             for (var rowIndex = 0; rowIndex < myValues.Length; rowIndex++)
             {
-                dm.NewRow();
                 foreach (var colIndex in colIndexes)
                 {
                     var myCol = cols[colIndex];
@@ -99,7 +98,7 @@ namespace WhichMan.DataAnalytics
             return dm;
         }
 
-        private static PropertyInfo GetProperty<T>(Expression<Func<T, object>> expression)
+        internal static PropertyInfo GetProperty<T>(Expression<Func<T, object>> expression)
         {
             if (expression.Body is UnaryExpression)
             {
@@ -118,7 +117,35 @@ namespace WhichMan.DataAnalytics
 
         #endregion
 
-        private static void ComputeDependentCols(this IDataMatrix dm, int[] colIndexes)
+        #region - 2D Array -
+
+        public static IDataMatrix Create(object[,] values, string[] columnHeaders)
+        {
+            Debug.Assert(columnHeaders.Length == values.GetLength(1));
+
+            var columns = GetColumns(columnHeaders, null, new DataMatrixColumn[0], false).ToArray();
+
+            var dm = new DataMatrixLite(values.GetLength(0), columns);
+
+            //load matrix values
+            for (var rowIndex = 0; rowIndex < values.GetLength(0); rowIndex++)
+            {
+                for (var colIndex = 0; colIndex < values.GetLength(1); colIndex++)
+                {
+                    var myCol = columns[colIndex];
+                    if (myCol.Compute == null)
+                        dm[rowIndex][colIndex] = values[rowIndex, colIndex];
+                }
+            }
+
+            return dm;
+        }
+
+        #endregion
+
+        #region - Helper Methods -
+
+        internal static void ComputeDependentCols(this IDataMatrix dm, int[] colIndexes)
         {
             //Compute dynamic columns
             foreach (var colIndex in colIndexes)
@@ -162,7 +189,7 @@ namespace WhichMan.DataAnalytics
             }
         }
 
-        private static IReadOnlyList<DataMatrixColumn> GetColumns(string[] allColumns, 
+        internal static IReadOnlyList<DataMatrixColumn> GetColumns(string[] allColumns, 
             string[] selectedColumns, DataMatrixColumn[] dependentColumns, bool verifyColumns = true)
         {
             var index = 0;
@@ -211,7 +238,7 @@ namespace WhichMan.DataAnalytics
             return dict.Values.ToArray();
         }
 
-        private static int[] GetDependencySortOrder(IReadOnlyList<DataMatrixColumn> fields)
+        internal static int[] GetDependencySortOrder(IReadOnlyList<DataMatrixColumn> fields)
         {
             var g = new DependencySorter<int>();
             g.AddObjects(fields.Select(c => c.Index).ToArray());
@@ -237,5 +264,7 @@ namespace WhichMan.DataAnalytics
                 yield return fields.First(c => c.Name == name).Index;
             }
         }
+
+        #endregion
     }
 }
