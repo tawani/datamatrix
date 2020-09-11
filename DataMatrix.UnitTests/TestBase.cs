@@ -13,7 +13,7 @@ namespace DataMatrix.UnitTests
         {
             var path = AppDomain.CurrentDomain.BaseDirectory ?? "";
             var ix = path.IndexOf("DataMatrix.UnitTests", StringComparison.CurrentCultureIgnoreCase);
-            var filePath = $"{path.Substring(0, ix)}DataMatrix.UnitTests//data//{fileName}";
+            var filePath = $"{path.Substring(0, ix)}DataMatrix.UnitTests/data/{fileName}";
 
             if(!File.Exists(filePath))
                 throw new Exception($"Could not find file '{filePath}'");
