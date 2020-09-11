@@ -13,10 +13,13 @@ namespace DataMatrix.UnitTests
         {
             var path = AppDomain.CurrentDomain.BaseDirectory ?? "";
             var ix = path.IndexOf("DataMatrix.UnitTests", StringComparison.CurrentCultureIgnoreCase);
-            var myPath = path.Substring(0, ix);
+            var filePath = $"{path.Substring(0, ix)}DataMatrix.UnitTests//data//{fileName}";
+
+            if(!File.Exists(filePath))
+                throw new Exception($"Could not find file '{filePath}'");
 
             var skipped = false;
-            using (var stream = new FileStream($"{myPath}DataMatrix.UnitTests//data//{fileName}", FileMode.Open))
+            using (var stream = new FileStream(filePath, FileMode.Open))
             using (var reader = new StreamReader(stream))
             {
                 while (!reader.EndOfStream)
