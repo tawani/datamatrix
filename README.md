@@ -1,2 +1,2 @@
 # DataMatrix
-Data container used to transform, analyse and summarize data.
+Data container used to transform, analyze and summarize data.
