@@ -10,7 +10,9 @@ namespace WhichMan.Analytics.Functions
         {
             if (dependsOn.Length == 0)
                 return null;
-            var values = dependsOn[0].Select(Convert.ToInt32).OrderBy(c => c).ToArray();
+            var values = dependsOn[0].Where(c => c != null).Select(Convert.ToInt32).OrderBy(c => c).ToArray();
+            if (values.Length == 0)
+                return null;
             var dict = new Dictionary<int, int>();
             foreach (var value in values)
             {

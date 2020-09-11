@@ -102,5 +102,38 @@ namespace DataMatrix.UnitTests
             var tb = dm.ToDataTable();
             Assert.Equal(3, tb.Columns.Count);
         }
+
+        [Fact]
+        public void Can_compute_standard_deviation_function()
+        {
+            var heights = new[] { 600, 470, 170, 430, 300 };
+            var names = new[] { "Rottweilers", "Labrador", "Dachshunds", "Terrier", "Bulldog" };
+            var list = heights.Select((c, i) => Tuple.Create(names[i], c));
+
+            var dm = DataMatrixFactory.Create(list, new[] { "Dog", "Height" },
+                new Func<Tuple<string, int>, object>[] { a => a.Item1, a => a.Item2 }, new DataMatrixColumn
+                {
+                    Name = "Deviation",
+                    DependsOn = new[] { "Height" },
+                    Initialize = StandardDeviation.Initialize,
+                    Compute = StandardDeviation.Compute
+                });
+
+            VerifyDeviation(dm, 0, "Rottweilers", 600, 2);
+            VerifyDeviation(dm, 1, "Labrador", 470, 1);
+            VerifyDeviation(dm, 2, "Dachshunds", 170, -2);
+            VerifyDeviation(dm, 3, "Terrier", 430, 1);
+            VerifyDeviation(dm, 4, "Bulldog", 300, -1);
+
+            var tb = dm.ToDataTable();
+            Assert.Equal(3, tb.Columns.Count);
+        }
+
+        private static void VerifyDeviation(IDataMatrix dm, int index, string name, int height, int deviation)
+        {
+            Assert.Equal(name, dm[index][0]);
+            Assert.Equal(height, dm[index][1]);
+            Assert.Equal(deviation, dm[index][2]);
+        }
     }
 }

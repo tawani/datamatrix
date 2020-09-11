@@ -9,7 +9,9 @@ namespace WhichMan.Analytics.Functions
         {
             if (dependsOn.Length == 0)
                 return null;
-            var values = dependsOn[0].Select(Convert.ToDecimal).OrderBy(c => c).ToArray();
+            var values = dependsOn[0].Where(c => c != null).Select(Convert.ToDecimal).OrderBy(c => c).ToArray();
+            if (values.Length == 0)
+                return null;
 
             //get the median
             var mid = 0m;
@@ -42,10 +44,10 @@ namespace WhichMan.Analytics.Functions
 
         class OutlierBoundaries
         {
-            public decimal InnerUpperBoundary { get; set; }
-            public decimal InnerLowerBoundary { get; set; }
-            public decimal OuterUpperBoundary { get; set; }
-            public decimal OuterLowerBoundary { get; set; }
+            public decimal InnerUpperBoundary { get; }
+            public decimal InnerLowerBoundary { get; }
+            public decimal OuterUpperBoundary { get; }
+            public decimal OuterLowerBoundary { get; }
 
             public OutlierBoundaries(decimal iub, decimal ilb, decimal oub, decimal olb)
             {
@@ -60,8 +62,7 @@ namespace WhichMan.Analytics.Functions
 
         private static decimal GetMedian(decimal[] values)
         {
-            decimal mid;
-            return GetMedian(values, out mid);
+            return GetMedian(values, out var mid);
         }
 
         private static decimal GetMedian(decimal[] values, out decimal midIndex)
