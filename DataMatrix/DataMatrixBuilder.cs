@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
@@ -56,6 +57,44 @@ namespace WhichMan.Analytics
 
         #region - Create from DataTable -
 
+        public static DataMatrixBuilder Create(DataTable table, params string[] columns )
+        {
+            if (columns == null || columns.Length < 1)
+            {
+                columns = (from DataColumn c in table.Columns select c.ColumnName).ToArray();
+            }
+            else
+            {
+                DataColumnCollection collection = table.Columns;
+                foreach (var column in columns)
+                {
+                    if (!collection.Contains(column))
+                    {
+                        throw new ColumnNotFoundException(column);
+                    }
+                }
+            }
+
+            var result = new DataMatrixBuilder
+            {
+                _columnHeaders = columns,
+                _arrValues = new object[table.Rows.Count, columns.Length],
+                _dependentColumns = new List<DataMatrixColumn>()
+            };
+
+            var colIndexes = columns.Select(c => table.Columns[c].Ordinal).ToArray();
+
+            // Fill table rows
+            for (var rowIndex = 0; rowIndex < result._arrValues.GetLength(0); rowIndex++)
+            {
+                for (var colIndex = 0; colIndex < colIndexes.Length; colIndex++)
+                {
+                    result._arrValues[rowIndex, colIndex] = table.Rows[rowIndex][colIndexes[colIndex]];
+                }
+            }
+
+            return result;
+        }
         #endregion
 
         #region - Add Columns -

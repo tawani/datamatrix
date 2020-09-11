@@ -1,4 +1,5 @@
 using System;
+using DataMatrix.UnitTests.Helpers;
 using WhichMan.Analytics;
 using WhichMan.Analytics.Pivot;
 using WhichMan.Analytics.Utils;
@@ -14,6 +15,33 @@ namespace DataMatrix.UnitTests
             var list = LoadOrders();
 
             var builder = DataMatrixBuilder.Create(list, new[] { "OrderDate" }, a => a.OrderDate);
+            builder.AddColumn("Year", "OrderDate", (values, args) => $"{values[0]:yyyy}");
+            builder.AddColumn("Month", "OrderDate", (values, args) => $"{values[0]:MM-MMM}");
+
+            var dm = builder.Build();
+            dm = dm.Pivot("Year", "OrderDate", AggregateFunction.Count, "Month");
+
+            //verify columns
+            Assert.Equal("Year", dm.Columns[0].Name);
+            Assert.Equal("01-Jan", dm.Columns[1].Name);
+            Assert.Equal("12-Dec", dm.Columns[12].Name);
+
+            //verify data
+            Assert.Equal("1996", dm[0][0]);
+            Assert.Equal(0, dm[0][1]);
+            Assert.Equal(22, dm[0][7]);
+            Assert.Equal("1998", dm[2][0]);
+
+            var tb = dm.ToDataTable();
+            Assert.Equal(13, tb.Columns.Count);
+        }
+
+        [Fact]
+        public void Can_pivot_matrix_by_row_column_count_orderDate_datatable()
+        {
+            var list = LoadOrders().ToDataTable();
+
+            var builder = DataMatrixBuilder.Create(list, "OrderDate");
             builder.AddColumn("Year", "OrderDate", (values, args) => $"{values[0]:yyyy}");
             builder.AddColumn("Month", "OrderDate", (values, args) => $"{values[0]:MM-MMM}");
 
