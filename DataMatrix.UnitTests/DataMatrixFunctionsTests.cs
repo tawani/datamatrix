@@ -45,7 +45,7 @@ namespace DataMatrix.UnitTests
             var dm = DataMatrixFactory.Create(table, "Score", new DataMatrixColumn
             {
                 Name = "Name",
-                DependsOn = new[] {"FirstName", "LastName"},
+                DependsOn = new[] { "FirstName", "LastName" },
                 Compute = (values, args) => values[0] + " " + values[1]
             });
             Assert.Equal(39, dm.RowCount);
@@ -64,7 +64,7 @@ namespace DataMatrix.UnitTests
             var dm = DataMatrixFactory.Create(table, "FirstName,LastName,Score", new DataMatrixColumn
             {
                 Name = "PercentileRank",
-                DependsOn = new[] {"Score"},
+                DependsOn = new[] { "Score" },
                 Initialize = PercentileRank.Initialize,
                 Compute = PercentileRank.Compute
             });
