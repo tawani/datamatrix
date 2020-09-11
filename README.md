@@ -22,6 +22,7 @@ var dt = dm.ToDataTable();
 ![Students scores](images/sudents_rank.png)
 
 > Note that **PercentileRank** is a built in function. You can also use simple functions like below.
+
 > Other functions included are **Outlier** and **Standard Deviation** (from mean). Others will be added as needed.
 
 ```javascript
