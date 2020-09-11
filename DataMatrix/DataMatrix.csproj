@@ -4,7 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>WhichMan.Analytics</RootNamespace>
     <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>datamatrix.snk.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <Authors>Tawani Anyangwe</Authors>
     <Company>WhichMan, INC</Company>
