@@ -4,6 +4,7 @@ using System.Linq;
 using DataMatrix.UnitTests.Helpers;
 using WhichMan.Analytics;
 using WhichMan.Analytics.Functions;
+using WhichMan.Analytics.Pivot;
 using WhichMan.Analytics.Utils;
 using Xunit;
 
@@ -127,6 +128,7 @@ namespace DataMatrix.UnitTests
 
             var tb = dm.ToDataTable();
             Assert.Equal(3, tb.Columns.Count);
+
         }
 
         private static void VerifyDeviation(IDataMatrix dm, int index, string name, int height, int deviation)
