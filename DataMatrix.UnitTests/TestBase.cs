@@ -11,8 +11,12 @@ namespace DataMatrix.UnitTests
     {
         protected static IEnumerable<T> ReadFile<T>(string fileName, Func<string[], T> map, bool firstLineIsHeaders = true)
         {
+            var path = AppDomain.CurrentDomain.BaseDirectory ?? "";
+            var ix = path.IndexOf("DataMatrix.UnitTests", StringComparison.CurrentCultureIgnoreCase);
+            var myPath = path.Substring(0, ix);
+
             var skipped = false;
-            using (var stream = new FileStream($"data//{fileName}", FileMode.Open))
+            using (var stream = new FileStream($"{myPath}DataMatrix.UnitTests//data//{fileName}", FileMode.Open))
             using (var reader = new StreamReader(stream))
             {
                 while (!reader.EndOfStream)
