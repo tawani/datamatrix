@@ -1,7 +1,22 @@
 # DataMatrix
 Data container used to transform, analyze and summarize data.
 
----
+## Installation
+
+using dotnet cli
+```sh
+$ dotnet add package DataMatrix
+```
+
+using Nuget Package Manager
+```sh
+PM> Install-Package DataMatrix
+```
+
+## Quick Examples
+
+### Add Calculated Columns
+
 Consider the dataset of student scores below
 
 ![Students scores](images/sudents.png)
@@ -33,6 +48,8 @@ var dm = DataMatrixFactory.Create(table, "Score", new DataMatrixColumn
     Compute = (values, args) => values[0] + " " + values[1]
 });
 ```
+
+### Create a Cross Tabulation
 
 You can also create cross tabulations using the Pivot function as shown below.
 
