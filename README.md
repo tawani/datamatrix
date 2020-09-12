@@ -23,7 +23,7 @@ Consider the dataset of student scores below
 
 You can add each students percentile rank using a DataMatrix as follows
 
-```javascript
+```cs
 var dm = DataMatrixFactory.Create(table, "FirstName,LastName,Score", new DataMatrixColumn
 {
     Name = "PercentileRank",
@@ -40,7 +40,7 @@ var dt = dm.ToDataTable();
 
 > Other functions included are **Outlier** and **Standard Deviation** (from mean). Others will be added as needed.
 
-```javascript
+```cs
 var dm = DataMatrixFactory.Create(table, "Score", new DataMatrixColumn
 {
     Name = "Name",
@@ -57,7 +57,7 @@ Consider the dataset of Northwind Orders below
 
 ![Northwind Orders](images/orders.png)
 
-```javascript
+```cs
 var builder = DataMatrixBuilder.Create(list, "OrderDate");
 builder.AddColumn("Year", "OrderDate", (values, args) => $"{values[0]:yyyy}");
 builder.AddColumn("Month", "OrderDate", (values, args) => $"{values[0]:MM-MMM}");
