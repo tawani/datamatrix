@@ -10,14 +10,7 @@ namespace DataMatrix.UnitTests
     public abstract class TestBase
     {
         protected static IEnumerable<T> ReadFile<T>(string fileName, Func<string[], T> map, bool firstLineIsHeaders = true)
-        {
-            //var path = AppDomain.CurrentDomain.BaseDirectory ?? "";
-            //var ix = path.IndexOf("DataMatrix.UnitTests", StringComparison.CurrentCultureIgnoreCase);
-            //var filePath = $"{path.Substring(0, ix + 21)}data/{fileName}";
-
-            //if(!File.Exists(filePath))
-            //    throw new Exception($"Could not find file '{filePath}'");
-
+        {            
             var skipped = false;
             using (var stream = typeof(TestBase).Assembly.GetManifestResourceStream("DataMatrix.UnitTests.Data." + fileName))
             using (var reader = new StreamReader(stream))
