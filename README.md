@@ -1,6 +1,8 @@
 # DataMatrix
 Data container used to transform, analyze and summarize data.
 
+[![Build Status](https://travis-ci.org/tawani/datamatrix.svg?branch=master)](https://travis-ci.org/tawani/datamatrix)
+
 ## Installation
 
 using dotnet cli
