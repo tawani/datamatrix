@@ -1,7 +1,7 @@
 # DataMatrix
 Data container used to transform, analyze and summarize data.
 
-[![Build Status](https://travis-ci.org/tawani/datamatrix.svg?branch=master)](https://travis-ci.org/tawani/datamatrix)  ![Nuget](https://img.shields.io/nuget/v/DataMatrix)
+[![Build Status](https://travis-ci.org/tawani/datamatrix.svg?branch=master)](https://travis-ci.org/tawani/datamatrix)  [![Nuget](https://img.shields.io/nuget/v/DataMatrix)](https://github.com/tawani/DataMatrix)
 
 ## Installation
 
